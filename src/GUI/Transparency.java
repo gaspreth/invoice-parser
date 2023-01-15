@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -28,11 +28,6 @@ public class Transparency extends JPanel implements MouseListener, MouseMotionLi
 	public Transparency() {
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-        try {
-        	image = ImageIO.read(new File(Consts.filePath));
-        } catch (IOException ex) {
-            // TODO handle exception...
-        }
         for (int i = 0; i < rectangles.length; i++) {
         	rectangles[i] = new Rectangle();
         }
@@ -117,6 +112,7 @@ public class Transparency extends JPanel implements MouseListener, MouseMotionLi
 	
 	public void setImage(BufferedImage image) {
 		this.image = image;
+		repaint();
 	}
 }
 

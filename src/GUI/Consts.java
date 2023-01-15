@@ -1,5 +1,6 @@
-package GUI;
+package gui;
 
 public class Consts {
-	final static String filePath = "C:\\Users\\kmeti\\Downloads\\invoice.png";
+//	final static String filePath = ".\\data\\testFile50.png";
+//	final static String filePath2 = ".\\data\\testFile51.png";
 }

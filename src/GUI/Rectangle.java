@@ -1,4 +1,4 @@
-package GUI;
+package gui;
 
 public class Rectangle {
 	private int x, y, a, b;

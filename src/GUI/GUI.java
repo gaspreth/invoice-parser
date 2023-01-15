@@ -1,18 +1,26 @@
-package GUI;
+package gui;
 
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
+
+import sthtorename.DocumentData;
 
 /**
  *
  * @author gapro
  */
 public class GUI extends javax.swing.JFrame {
-
+	
+	DocumentData documentData;
+	
     /**
-     * Creates new form NewJFrame
+     * Creates new form GUI
      */
     public GUI() {
         initComponents();
@@ -27,6 +35,7 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">                          
     private void initComponents() {
 
+    	loadDocument = new javax.swing.JButton();
         previous = new javax.swing.JButton();
         next = new javax.swing.JButton();
         create = new javax.swing.JButton();
@@ -43,23 +52,50 @@ public class GUI extends javax.swing.JFrame {
         jTextField6 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("PDF marker");
 
+        loadDocument.setText("load document");
+        loadDocument.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	try {
+					loadDocumentButtonActionPerformed(evt);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            }
+        });
+        
         previous.setText("previous");
+        previous.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousButtonActionPerformed(evt);
+            }
+        });
 
         next.setText("next");
+        next.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
 
         create.setText("create");
+        create.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
 
 
         javax.swing.GroupLayout transparencyLayout = new javax.swing.GroupLayout(transparency);
         transparency.setLayout(transparencyLayout);
         transparencyLayout.setHorizontalGroup(
             transparencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 520, Short.MAX_VALUE)
+            .addGap(0, 720, Short.MAX_VALUE)
         );
         transparencyLayout.setVerticalGroup(
             transparencyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 620, Short.MAX_VALUE)
+            .addGap(0, 1000, Short.MAX_VALUE)
         );
 
         jLabel1.setText("jLabel1");
@@ -103,6 +139,7 @@ public class GUI extends javax.swing.JFrame {
                 .addComponent(transparency, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            		.addComponent(loadDocument)
                     .addComponent(create)
                     .addComponent(next)
                     .addComponent(previous))
@@ -111,7 +148,9 @@ public class GUI extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(438, Short.MAX_VALUE)
+                .addContainerGap(20, Short.MAX_VALUE)
+                .addComponent(loadDocument)
+                .addGap(80, 720, 800)
                 .addComponent(previous)
                 .addGap(18, 18, 18)
                 .addComponent(next)
@@ -144,7 +183,38 @@ public class GUI extends javax.swing.JFrame {
         );
 
         pack();
-    }// </editor-fold>                        
+    }
+    
+	private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        System.out.println("previous");
+        try {
+			transparency.setImage(ImageIO.read(new File(this.documentData.relativePageMove(-1))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+	private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        System.out.println("next");
+        try {
+			transparency.setImage(ImageIO.read(new File(this.documentData.relativePageMove(1))));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+	private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        System.out.println("create");
+    }
+	private void loadDocumentButtonActionPerformed(java.awt.event.ActionEvent evt) {                                         
+        System.out.println("loadDocument");
+        // TODO
+        try {
+        	this.documentData = new DocumentData(".\\data\\testFile.pdf");
+        	this.documentData.generateImages(82);
+        	transparency.setImage(ImageIO.read(new File(this.documentData.getCurrentPageImage())));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
 
     /**
      * @param args the command line arguments
@@ -171,7 +241,8 @@ public class GUI extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify                     
+    // Variables declaration - do not modify
+    private javax.swing.JButton loadDocument;
     private javax.swing.JButton previous;
     private javax.swing.JButton next;
     private javax.swing.JButton create;
