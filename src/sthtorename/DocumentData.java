@@ -2,7 +2,6 @@ package sthtorename;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class DocumentData {
 		innerDocuments.add(innerDoc);
 	}
 	
-    public void generateImages(int dpi) throws Exception {
+    public void generateImages(int dpi, boolean regenerate) throws Exception {
     	// TODO function should do one thing :P and breaking DRY principle here
         File sourceFile = new File(documentPath);
         String fileName = sourceFile.getName();
@@ -60,7 +59,7 @@ public class DocumentData {
         
         String outputFilePath = ".\\data\\" + fileNameWithoutExt + "\\" + fileNameWithoutExt + "%s" + ".png";
 
-        if (folderCreated) {        	
+        if (folderCreated || regenerate) {        	
         	PDFRenderer pdfRenderer = new PDFRenderer(document);      	
         	for (int i = 0; i < numPages; i++) {
         		BufferedImage image = pdfRenderer.renderImageWithDPI(i, dpi, ImageType.GRAY);

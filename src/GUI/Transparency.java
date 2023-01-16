@@ -7,47 +7,43 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import sthtorename.DataField;
+import util.Util;
 
 @SuppressWarnings("serial")
 public class Transparency extends JPanel implements MouseListener, MouseMotionListener {
 	// "transparancy" in slovene is "prosojnica"
 	
-	// TODO number of rectangles should be dynamic
-	private Rectangle[] rectangles = new Rectangle[5];
+	private DataField[] dataFields;
 	private BufferedImage image;
 	
-	
-	// TODO refactor
-	private Rectangle activeField;
+	private DataField activeDataField;
 	
 	
 	public Transparency() {
 		this.addMouseListener(this);
 		this.addMouseMotionListener(this);
-        for (int i = 0; i < rectangles.length; i++) {
-        	rectangles[i] = new Rectangle();
-        }
-        activeField = rectangles[0];
 	}
 
     private void drawRectangles(Graphics g) {
-
+    	
     	Graphics2D g2d = (Graphics2D) g;
-
-        g2d.setColor(Color.blue);
-        
-        for (Rectangle r : rectangles) {
-        	if (r != null) {
-        		g2d.drawRect(r.getX(), r.getY(), r.getA(), r.getB());        		
-        	}
-        }
-        g2d.drawRect(activeField.getX(), activeField.getY(), activeField.getA(), activeField.getB());
-
+    	
+    	if (dataFields != null) {
+    		
+    		g2d.setColor(Color.blue);
+    		
+    		for (DataField df : dataFields) {
+    			Rectangle r = df.getRectangle();
+    			if (r != null) {
+    				g2d.drawRect(r.getX(), r.getY(), r.getA(), r.getB());        		
+    			}
+    		}  		
+    	}
     }
+    
 
     @Override
     public void paintComponent(Graphics g) {
@@ -59,60 +55,68 @@ public class Transparency extends JPanel implements MouseListener, MouseMotionLi
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		int a = e.getX() - activeField.getX();
-		int b = e.getY() - activeField.getY();
- 		activeField.setSides(a, b);
-		repaint();
-		
+		if (activeDataField != null) {
+			Rectangle r = activeDataField.getRectangle();
+			int a = e.getX() - r.getX();
+			int b = e.getY() - r.getY();
+			r.setSides(a, b);
+			repaint();			
+		}
 	}
 	
-	public void setActiveField(Rectangle r) {
-		this.activeField = r;
-	}
+
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseMoved(MouseEvent e) {}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		activeField.setXY(e.getX(), e.getY());
-		activeField.log();
+		if (activeDataField != null) {
+			Rectangle r = activeDataField.getRectangle();
+			r.setXY(e.getX(), e.getY());
+			r.log();			
+		}
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		int a = e.getX() - activeField.getX();
-		int b = e.getY() - activeField.getY(); 
- 		activeField.setSides(a, b);
-		activeField.log();
-		repaint();
-		
+		if (activeDataField != null) {
+			Rectangle r = activeDataField.getRectangle();
+			int a = e.getX() - r.getX();
+			int b = e.getY() - r.getY(); 
+			r.setSides(a, b);
+			// activeDataField.setRectangle(r);
+			r.log();
+			repaint();
+			if (a > 0 && b > 0) {
+				// TODO dynamic path
+				Util.cropImage(this.image, ".\\data\\new.png", r.getX(), r.getY(), a, b);		
+			}
+		}
 	}
 
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseEntered(MouseEvent e) {}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void mouseExited(MouseEvent e) {}
 	
 	public void setImage(BufferedImage image) {
 		this.image = image;
 		repaint();
+	}
+	public void setActiveDataField(DataField df) {
+		this.activeDataField = df;
+	}
+	public void setActiveDataField(int i) {
+		this.activeDataField = this.dataFields[i];
+	}
+	
+	public void setDataFields(DataField[] dfs) {
+		this.dataFields = dfs;
 	}
 }
 

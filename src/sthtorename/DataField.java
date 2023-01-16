@@ -15,6 +15,7 @@ public class DataField {
 		this.name = name;
 		this.predictedValue = predictValue();
 		this.actualValue = new String(this.predictedValue);
+		this.rectangle = new Rectangle();
 	}
 	
 	public String predictValue() {
@@ -28,6 +29,10 @@ public class DataField {
 	
 	public Rectangle getRectangle() {
 		return this.rectangle;
+	}
+	
+	public String getPathToImg() {
+		return this.pathToImg;
 	}
 	
 	public void setRectangle(Rectangle r) {

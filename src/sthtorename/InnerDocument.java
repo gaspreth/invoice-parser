@@ -24,6 +24,10 @@ public class InnerDocument {
 		this.pages.add(s);
 	}
 	
+	public DataField[] getDataFields() {
+		return this.dataFields;
+	}
+	
 	public DataField getDataField(String name) throws Exception {
 		for (DataField df : this.dataFields) {
 			if (df.getName().equals(name)) {
